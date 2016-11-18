@@ -16,7 +16,8 @@
 #' \code{n} splits \code{n+1} breaks must be specified. If \code{breaks} is
 #' specified (other than \code{NA}), \code{qtiles} are ignored.
 #' @param london_only boolean; for county level maps only (otherwise ignored),
-#' should only the London counties be displayed?
+#' should only the London counties be displayed? Default is \code{FALSE}.
+#' @param greyscale boolean; should the plot be in greyscale only?
 #'
 #' If \code{breaks} is specified, \code{qtiles} is ignored.
 #'
@@ -43,7 +44,7 @@
 #' plotMap(service_data_spatial, "hoaxes", "My lovely map", breaks = c(57, 65, 73, 83))
 #' }
 #' @export
-plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only = FALSE) {
+plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only = FALSE, greyscale = FALSE) {
 
   # n-tile breaks
   if(any(is.na(breaks))) {
@@ -53,14 +54,24 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
     qbreaks <- breaks
   }
 
-  n_breaks <- length(qbreaks)
+  n_breaks <- length(qbreaks) - 1
 
-  if (length(qbreaks) > 6) {
-    colours <- cartography::carto.pal(pal1 = "green.pal", n1 = floor(n_breaks / 2) , pal2 = "red.pal", n2 = ceiling(n_breaks / 2))
+  try(if (n_breaks < 2) stop("Too few breaks/quantiles: Min of 2."))
+  try(if (greyscale == TRUE & n_breaks > 9) stop("Too many breaks/quantiles: Max of 9 with a greyscale palette. (Max of 11 with a colour palette.)"))
+  try(if (greyscale == FALSE & n_breaks > 11) stop("Too many breaks/quantiles: Max of 11 with a colour palette."))
+
+  if (n_breaks == 2) {
+    colours <- RColorBrewer::brewer.pal(3, "Greys")[2:3]
+    bgcolour <- "#ffffff"
   } else {
-    colours <- cartography::carto.pal(pal1 = "green.pal", n1 = length(qbreaks))
+  if (greyscale == TRUE) {
+    colours <- RColorBrewer::brewer.pal(n_breaks, "Greys")
+    bgcolour <- "#ffffff"
+  } else {
+    colours <- RColorBrewer::brewer.pal(n_breaks, "PRGn")
+    bgcolour <- "#A6CAE0"
   }
-
+}
   graphics::par(mar = c(0, 0, 1.5, 0))
   if("county" %in% colnames(data@data)) {
     # county level
@@ -68,7 +79,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
     if(london_only == FALSE) {
       # England
 
-      sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = "#A6CAE0")
+      sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = bgcolour)
       # Add cloro
       cartography::choroLayer(spdf = data, df = data@data, var = variable,
                  breaks = qbreaks, col = colours,
@@ -78,36 +89,35 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
                  colNA = "#aaaaaa", add = TRUE)
     } else {
       # London
-      sp:::plot.SpatialPolygons(data[data$in_london == TRUE, ], border = NA, col = NA, bg = "#A6CAE0")
-      sp:::plot.SpatialPolygons(data, border = "#666666", lwd = 0.25, col = "#aaaaaa", bg = NA, add = TRUE)
+      sp:::plot.SpatialPolygons(data[data$in_london == TRUE, ], border = NA, col = NA, bg = bgcolour)
+      sp:::plot.SpatialPolygons(data, border = "#000000", lwd = 0.25, col = bgcolour, bg = NA, add = TRUE)
       # Add cloro
       cartography::choroLayer(spdf = data[data$in_london == TRUE, ], df = data[data$in_london == TRUE, ]@data, var = variable,
                  breaks = qbreaks, col = colours,
-                 border = "#666666", lwd = 0.25, legend.pos = "topright",
+                 border = "#000000", lwd = 0.25, legend.pos = "topright",
                  legend.title.txt = variable,
                  legend.values.rnd = 2,
-                 colNA = "#aaaaaa", add = TRUE)
+                 colNA = bgcolour, add = TRUE)
 
     }
-    sp:::plot.SpatialPolygons(vanmaps::ambulance_boundary_data, border = "#ffffff", lwd = 2, col = NA, bg = NA, add = TRUE)
+    sp:::plot.SpatialPolygons(vanmaps::ambulance_boundary_data, border = "#ffffff", lwd = 1, col = NA, bg = NA, add = TRUE)
 
   } else {
     # ambulance service level
 
-    sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = "#A6CAE0")
+    sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = bgcolour)
     # Add cloro
     cartography::choroLayer(spdf = data, df = data@data, var = variable,
                breaks = qbreaks, col = colours,
-               border = "#ffffff", lwd = 2, legend.pos = "topright",
+               border = "#ffffff", lwd = 1, legend.pos = "topright",
                legend.title.txt = variable,
                legend.values.rnd = 2,
-               colNA = "#aaaaaa", add = TRUE)
+               colNA = bgcolour, add = TRUE)
 
   }
   cartography::layoutLayer(title = title, # title of the map
               author = "",  # no author text
-              sources = paste("Contains National Statistics data: Crown copyright and database right 2016;",
-                              "Contains OS data: Crown copyright and database right 2016", sep = "\n"),
+              sources = "",
               scale = NULL,
               col = NA,
               frame = FALSE,
@@ -135,8 +145,15 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 #' @param breaks the (ordered) breaks on which to split \code{variable}, for
 #' \code{n} splits \code{n+1} breaks must be specified. If \code{breaks} is
 #' specified (other than \code{NA}), \code{qtiles} are ignored.
+#' @param greyscale boolean; should the plot be in greyscale only? Default is
+#' \code{FALSE}.
 #'
-#' If \code{breaks} is specified, \code{qtiles} is ignored.
+#' If \code{breaks} is specified, \code{qtiles} is ignored. There is a
+#' maximum of:
+#' \itemize{
+#'  \item 9 levels allowed for greyscale plots;
+#'  \iten 11 levels for colour plots.
+#' }
 #'
 #' @return \code{Save complete.} upon completion.  The saved files will appear
 #' in the working directory.
@@ -159,7 +176,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 #' saveMaps("lovely-map", 500, county_data, "deaths", "My lovely map")
 #' }
 #' @export
-saveMaps <- function(fname, fwidth, data, variable, title, qtiles = 5, breaks = NA) {
+saveMaps <- function(fname, fwidth, data, variable, title, qtiles = 5, breaks = NA, greyscale = FALSE) {
 
   if("county" %in% colnames(data@data)) {
     # county level

@@ -4,10 +4,12 @@ Version: 0.0.0.9000
 Authors@R: person("Tony", "Stone", email = "tony.stone@sheffield.ac.uk", role = c("aut", "cre"))
 Description: The creation of choropleth maps for the VAN Project, MCRU, ScHARR,
     University of Sheffield.
-Depends: R (>= 3.3.2)
+Depends:
+    R (>= 3.3.0),
+    sp
 Imports:
     cartography (>= 1.4.0),
-    sp
+    RColorBrewer
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
