@@ -4,7 +4,8 @@
 \alias{saveMaps}
 \title{Save choropleth map(s)}
 \usage{
-saveMaps(fname, fwidth, data, variable, title, qtiles = 5, breaks = NA)
+saveMaps(fname, fwidth, data, variable, title, qtiles = 5, breaks = NA,
+  greyscale = FALSE)
 }
 \arguments{
 \item{fname}{file name to save the plots under (no directory paths or file
@@ -27,9 +28,17 @@ if \code{breaks} is specified, \code{qtiles} is ignored. By default
 
 \item{breaks}{the (ordered) breaks on which to split \code{variable}, for
 \code{n} splits \code{n+1} breaks must be specified. If \code{breaks} is
-specified (other than \code{NA}), \code{qtiles} are ignored.
+specified (other than \code{NA}), \code{qtiles} are ignored.}
 
-If \code{breaks} is specified, \code{qtiles} is ignored.}
+\item{greyscale}{boolean; should the plot be in greyscale only? Default is
+\code{FALSE}.
+
+If \code{breaks} is specified, \code{qtiles} is ignored. There is a
+maximum of:
+\itemize{
+ \item 9 levels allowed for greyscale plots;
+ \item 11 levels for colour plots.
+}}
 }
 \value{
 \code{Save complete.} upon completion.  The saved files will appear

@@ -5,7 +5,7 @@
 \title{Plot a choropleth map}
 \usage{
 plotMap(data, variable, title, qtiles = 5, breaks = NA,
-  london_only = FALSE)
+  london_only = FALSE, greyscale = FALSE)
 }
 \arguments{
 \item{data}{A spatial polygons data frame. The map produced will be at the
@@ -26,7 +26,9 @@ if \code{breaks} is specified, \code{qtiles} is ignored. By default
 specified (other than \code{NA}), \code{qtiles} are ignored.}
 
 \item{london_only}{boolean; for county level maps only (otherwise ignored),
-should only the London counties be displayed?
+should only the London counties be displayed? Default is \code{FALSE}.}
+
+\item{greyscale}{boolean; should the plot be in greyscale only?
 
 If \code{breaks} is specified, \code{qtiles} is ignored.}
 }
