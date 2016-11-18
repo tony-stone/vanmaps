@@ -8,6 +8,6 @@
 or Ambulance Service level.}
 \description{
 Contains National Statistics data: Crown copyright and database right 2016;
-Contains OS data: Crown copyright and database right 2016"
+Contains OS data: Crown copyright and database right 2016
 }
 

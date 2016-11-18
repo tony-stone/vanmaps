@@ -63,13 +63,16 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
   if (n_breaks == 2) {
     colours <- RColorBrewer::brewer.pal(3, "Greys")[2:3]
     bgcolour <- "#ffffff"
+    nacolour <- "#ffffff"
   } else {
   if (greyscale == TRUE) {
     colours <- RColorBrewer::brewer.pal(n_breaks, "Greys")
     bgcolour <- "#ffffff"
+    nacolour <- "#ffffff"
   } else {
     colours <- RColorBrewer::brewer.pal(n_breaks, "PRGn")
     bgcolour <- "#A6CAE0"
+    nacolour <- "#aaaaaa"
   }
 }
   graphics::par(mar = c(0, 0, 1.5, 0))
@@ -80,39 +83,39 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
       # England
 
       plot(data, border = NA, col = NA, bg = bgcolour)
-      # Add cloro
+      # Add choro
       cartography::choroLayer(spdf = data, df = data@data, var = variable,
                  breaks = qbreaks, col = colours,
                  border = "#666666", lwd = 0.25, legend.pos = "topright",
                  legend.title.txt = variable,
                  legend.values.rnd = 2,
-                 colNA = "#aaaaaa", add = TRUE)
+                 colNA = nacolour, add = TRUE)
     } else {
       # London
       plot(data[data$in_london == TRUE, ], border = NA, col = NA, bg = bgcolour)
-      plot(data, border = "#000000", lwd = 0.25, col = bgcolour, bg = NA, add = TRUE)
-      # Add cloro
+      plot(data, border = "#666666", lwd = 0.25, col = "#ffffff", bg = NA, add = TRUE)
+      # Add choro
       cartography::choroLayer(spdf = data[data$in_london == TRUE, ], df = data[data$in_london == TRUE, ]@data, var = variable,
                  breaks = qbreaks, col = colours,
-                 border = "#000000", lwd = 0.25, legend.pos = "topright",
+                 border = "#666666", lwd = 0.25, legend.pos = "topright",
                  legend.title.txt = variable,
                  legend.values.rnd = 2,
-                 colNA = bgcolour, add = TRUE)
+                 colNA = nacolour, add = TRUE)
 
     }
-    plot(vanmaps::ambulance_boundary_data, border = "#ffffff", lwd = 1, col = NA, bg = NA, add = TRUE)
+    plot(vanmaps::ambulance_boundary_data, border = "#000000", lwd = 1, col = NA, bg = NA, add = TRUE)
 
   } else {
     # ambulance service level
 
     plot(data, border = NA, col = NA, bg = bgcolour)
-    # Add cloro
+    # Add choro
     cartography::choroLayer(spdf = data, df = data@data, var = variable,
                breaks = qbreaks, col = colours,
-               border = "#ffffff", lwd = 1, legend.pos = "topright",
+               border = "#000000", lwd = 1, legend.pos = "topright",
                legend.title.txt = variable,
                legend.values.rnd = 2,
-               colNA = bgcolour, add = TRUE)
+               colNA = nacolour, add = TRUE)
 
   }
   cartography::layoutLayer(title = title, # title of the map
