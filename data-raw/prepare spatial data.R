@@ -65,6 +65,9 @@ county.data[, c("LAD11", "LAD14") := NULL]
 # In London?
 county.data[, in_london := (CNTY14 %in% c(lad_lb$X0, "E41000324"))]
 
+# Remove IOW
+county.data <- county.data[CNTY14 != "E06000046"]
+
 
 
 # Prepare LSOA to Ambulance Service lookup (based on CCG) -----------------
@@ -79,7 +82,10 @@ setnames(ccg.to.amb, c("CCG.code.ons", "CCG.code", "CCG.name", "service"))
 # Rename NHS England names to our names
 ccg.to.amb[service == "EASTAmb", service := "EoE"]
 
-lsoa.to.amb <- merge(lsoa.to.ccg[, .(LSOA11, CCG.code)], ccg.to.amb[, .(CCG.code, service)], by = "CCG.code", all = TRUE)
+# Remove IOW
+ccg.to.amb <- ccg.to.amb[service != "IOW"]
+
+lsoa.to.amb <- merge(lsoa.to.ccg[, .(LSOA11, CCG.code)], ccg.to.amb[, .(CCG.code, service)], by = "CCG.code", all.y = TRUE)
 lsoa.to.amb[, CCG.code := NULL]
 
 
@@ -101,7 +107,7 @@ lsoa_boundary_data_WGS84 <- spTransform(lsoa_boundary_data_raw, WGS84_projection
 
 # Merge with counties data ------------------------------------------------
 
-lsoa_boundary_data <- merge(lsoa_boundary_data_WGS84, county.data, by.x = "lsoa11cd", by.y = "LSOA11")
+lsoa_boundary_data <- merge(lsoa_boundary_data_WGS84, county.data, by.x = "lsoa11cd", by.y = "LSOA11", all.x = FALSE)
 
 # Union of LSOAs into Counties, returns SP (not SPDF)
 county_boundaries <- unionSpatialPolygons(lsoa_boundary_data, lsoa_boundary_data$CNTY14)
@@ -114,11 +120,11 @@ row.names(counties_df) <- counties_df$CNTY14
 county_boundary_data <- SpatialPolygonsDataFrame(county_boundaries, counties_df, match.ID = TRUE)
 
 # save
-devtools::use_data(county_boundary_data, compress = "xz")
+devtools::use_data(county_boundary_data, compress = "xz", overwrite = TRUE)
 
 # Merge with ambulance service data ---------------------------------------
 
-lsoa_boundary_data <- merge(lsoa_boundary_data_WGS84, lsoa.to.amb, by.x = "lsoa11cd", by.y = "LSOA11")
+lsoa_boundary_data <- merge(lsoa_boundary_data_WGS84, lsoa.to.amb, by.x = "lsoa11cd", by.y = "LSOA11", all.x = FALSE)
 
 # Union of LSOAs into Counties, returns SP (not SPDF)
 ambulance_boundaries <- unionSpatialPolygons(lsoa_boundary_data, lsoa_boundary_data$service)
@@ -131,4 +137,4 @@ row.names(ambulance_df) <- ambulance_df$service
 ambulance_boundary_data <- SpatialPolygonsDataFrame(ambulance_boundaries, ambulance_df, match.ID = TRUE)
 
 # save
-devtools::use_data(ambulance_boundary_data, compress = "xz")
+devtools::use_data(ambulance_boundary_data, compress = "xz", overwrite = TRUE)
