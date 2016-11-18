@@ -101,7 +101,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
     } else {
       # London
       plot(data[data$in_london == TRUE, ], border = NA, col = NA, bg = bgcolour)
-      plot(data, border = "#666666", lwd = 0.25, col = "#ffffff", bg = NA, add = TRUE)
+      plot(data, border = "#666666", lwd = 0.25, col = nacolour, bg = NA, add = TRUE)
       # Add choro
       cartography::choroLayer(spdf = data[data$in_london == TRUE, ], df = data[data$in_london == TRUE, ]@data, var = variable,
                  breaks = qbreaks, col = colours,
