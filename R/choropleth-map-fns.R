@@ -4,26 +4,34 @@
 #' to it.
 #'
 #' @param data A spatial polygons data frame. The map produced will be at the
-#' county level if the column name \code{county} is present otherwise the map
-#' will be at the level of the provided geography.
+#'   county level if the column name \code{county} is present otherwise the map
+#'   will be at the level of the provided geography.
 #' @param variable the name of the variable on the basis of which the map
-#' should be themed
+#'   should be themed
 #' @param title the title to display on the map
 #' @param qtiles the number of quantiles to split \code{variable} into. Note:
-#' if \code{breaks} is specified, \code{qtiles} is ignored. By default
-#' \code{variable} is split into quintiles.
+#'   if \code{breaks} is specified, \code{qtiles} is ignored. By default
+#'   \code{variable} is split into quintiles.
 #' @param breaks the (ordered) breaks on which to split \code{variable}, for
-#' \code{n} splits \code{n+1} breaks must be specified. If \code{breaks} is
-#' specified (other than \code{NA}), \code{qtiles} are ignored.
+#'   \code{n} splits \code{n+1} breaks must be specified. If \code{breaks} is
+#'   specified (other than \code{NA}), \code{qtiles} are ignored.
 #' @param london_only boolean; for county level maps only (otherwise ignored),
-#' should only the London counties be displayed? Default is \code{FALSE}.
-#' @param greyscale boolean; should the plot be in greyscale only?
+#'   should only the London counties be displayed? Default is \code{FALSE}.
+#' @param greyscale boolean; should the plot be in greyscale only? Default is
+#'   \code{FALSE}.
 #'
+#' @details
 #' If \code{breaks} is specified, \code{qtiles} is ignored.
+#' There is a maximum of:
+#' \itemize{
+#'  \item 9 levels allowed for greyscale plots;
+#'  \item 11 levels for colour plots.
+#' }
 #'
 #' @return A choropleth map at the county level if the supplied \code{data}
-#' contained the column name \code{county}; otherwise a choropleth map
-#' at the level of the provided geography.
+#'   contained the column name \code{county}; otherwise a choropleth map
+#'   at the level of the provided geography.
+#'
 #' @examples
 #' \dontrun{
 #' # example county-level data
@@ -131,7 +139,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 #'
 #' This function will attempt to save choropleth map(s) using the data provided
 #' to it. If the data is at the County level it will save both England and
-#' London only maps.
+#' London-only maps.
 #'
 #' @param fname file name to save the plots under (no directory paths or file
 #' extensions)
@@ -151,8 +159,9 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 #' @param greyscale boolean; should the plot be in greyscale only? Default is
 #' \code{FALSE}.
 #'
-#' If \code{breaks} is specified, \code{qtiles} is ignored. There is a
-#' maximum of:
+#' @details
+#' If \code{breaks} is specified, \code{qtiles} is ignored.
+#' There is a maximum of:
 #' \itemize{
 #'  \item 9 levels allowed for greyscale plots;
 #'  \item 11 levels for colour plots.

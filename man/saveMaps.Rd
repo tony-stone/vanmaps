@@ -31,14 +31,7 @@ if \code{breaks} is specified, \code{qtiles} is ignored. By default
 specified (other than \code{NA}), \code{qtiles} are ignored.}
 
 \item{greyscale}{boolean; should the plot be in greyscale only? Default is
-\code{FALSE}.
-
-If \code{breaks} is specified, \code{qtiles} is ignored. There is a
-maximum of:
-\itemize{
- \item 9 levels allowed for greyscale plots;
- \item 11 levels for colour plots.
-}}
+\code{FALSE}.}
 }
 \value{
 \code{Save complete.} upon completion.  The saved files will appear
@@ -47,7 +40,15 @@ in the working directory.
 \description{
 This function will attempt to save choropleth map(s) using the data provided
 to it. If the data is at the County level it will save both England and
-London only maps.
+London-only maps.
+}
+\details{
+If \code{breaks} is specified, \code{qtiles} is ignored.
+There is a maximum of:
+\itemize{
+ \item 9 levels allowed for greyscale plots;
+ \item 11 levels for colour plots.
+}
 }
 \examples{
 \dontrun{

@@ -28,18 +28,25 @@ specified (other than \code{NA}), \code{qtiles} are ignored.}
 \item{london_only}{boolean; for county level maps only (otherwise ignored),
 should only the London counties be displayed? Default is \code{FALSE}.}
 
-\item{greyscale}{boolean; should the plot be in greyscale only?
-
-If \code{breaks} is specified, \code{qtiles} is ignored.}
+\item{greyscale}{boolean; should the plot be in greyscale only? Default is
+\code{FALSE}.}
 }
 \value{
 A choropleth map at the county level if the supplied \code{data}
-contained the column name \code{county}; otherwise a choropleth map
-at the level of the provided geography.
+  contained the column name \code{county}; otherwise a choropleth map
+  at the level of the provided geography.
 }
 \description{
 This function will attempt to plot a choropleth map using the data provided
 to it.
+}
+\details{
+If \code{breaks} is specified, \code{qtiles} is ignored.
+There is a maximum of:
+\itemize{
+ \item 9 levels allowed for greyscale plots;
+ \item 11 levels for colour plots.
+}
 }
 \examples{
 \dontrun{
