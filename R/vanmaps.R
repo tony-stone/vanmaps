@@ -6,4 +6,5 @@
 #'
 #' @docType package
 #' @name vanmaps
+#' @import sp
 NULL

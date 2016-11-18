@@ -79,7 +79,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
     if(london_only == FALSE) {
       # England
 
-      sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = bgcolour)
+      plot(data, border = NA, col = NA, bg = bgcolour)
       # Add cloro
       cartography::choroLayer(spdf = data, df = data@data, var = variable,
                  breaks = qbreaks, col = colours,
@@ -89,8 +89,8 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
                  colNA = "#aaaaaa", add = TRUE)
     } else {
       # London
-      sp:::plot.SpatialPolygons(data[data$in_london == TRUE, ], border = NA, col = NA, bg = bgcolour)
-      sp:::plot.SpatialPolygons(data, border = "#000000", lwd = 0.25, col = bgcolour, bg = NA, add = TRUE)
+      plot(data[data$in_london == TRUE, ], border = NA, col = NA, bg = bgcolour)
+      plot(data, border = "#000000", lwd = 0.25, col = bgcolour, bg = NA, add = TRUE)
       # Add cloro
       cartography::choroLayer(spdf = data[data$in_london == TRUE, ], df = data[data$in_london == TRUE, ]@data, var = variable,
                  breaks = qbreaks, col = colours,
@@ -100,12 +100,12 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
                  colNA = bgcolour, add = TRUE)
 
     }
-    sp:::plot.SpatialPolygons(vanmaps::ambulance_boundary_data, border = "#ffffff", lwd = 1, col = NA, bg = NA, add = TRUE)
+    plot(vanmaps::ambulance_boundary_data, border = "#ffffff", lwd = 1, col = NA, bg = NA, add = TRUE)
 
   } else {
     # ambulance service level
 
-    sp:::plot.SpatialPolygons(data, border = NA, col = NA, bg = bgcolour)
+    plot(data, border = NA, col = NA, bg = bgcolour)
     # Add cloro
     cartography::choroLayer(spdf = data, df = data@data, var = variable,
                breaks = qbreaks, col = colours,
@@ -152,7 +152,7 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 #' maximum of:
 #' \itemize{
 #'  \item 9 levels allowed for greyscale plots;
-#'  \iten 11 levels for colour plots.
+#'  \item 11 levels for colour plots.
 #' }
 #'
 #' @return \code{Save complete.} upon completion.  The saved files will appear
