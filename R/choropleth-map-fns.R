@@ -64,9 +64,9 @@ plotMap <- function(data, variable, title, qtiles = 5, breaks = NA, london_only 
 
   n_breaks <- length(qbreaks) - 1
 
-  try(if (n_breaks < 2) stop("Too few breaks/quantiles: Min of 2."))
-  try(if (greyscale == TRUE & n_breaks > 9) stop("Too many breaks/quantiles: Max of 9 with a greyscale palette. (Max of 11 with a colour palette.)"))
-  try(if (greyscale == FALSE & n_breaks > 11) stop("Too many breaks/quantiles: Max of 11 with a colour palette."))
+  if (n_breaks < 2) stop("Too few breaks/quantiles: Min of 2.")
+  if (greyscale == TRUE & n_breaks > 9) stop("Too many breaks/quantiles: Max of 9 with a greyscale palette. (Max of 11 with a colour palette.)")
+  if (greyscale == FALSE & n_breaks > 11) stop("Too many breaks/quantiles: Max of 11 with a colour palette.")
 
   if (n_breaks == 2) {
     colours <- RColorBrewer::brewer.pal(3, "Greys")[2:3]
