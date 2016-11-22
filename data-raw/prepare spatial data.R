@@ -18,15 +18,15 @@ setnames(lsoa_to_lad_lu, c("LSOA11", "LAD11"))
 # Add the LAD14 codes
 lsoa_to_lad_lu[, LAD14 := LAD11] # mainly the same
 # Changes:
-# The East Hertfordshire and Stevenage (Boundary Change) Order 2013
+# The Gateshead and Northumberland (Boundary Change) Order 2013
+lsoa_to_lad_lu[LAD11 == "E08000020", LAD14 := "E08000037"]
 lsoa_to_lad_lu[LAD11 == "E06000048", LAD14 := "E06000057"]
+# The East Hertfordshire and Stevenage (Boundary Change) Order 2013
 lsoa_to_lad_lu[LAD11 == "E07000097", LAD14 := "E07000242"]
 lsoa_to_lad_lu[LAD11 == "E07000101", LAD14 := "E07000243"]
 # The St Albans and Welwyn Hatfield (Boundary Change) Order 2012
 lsoa_to_lad_lu[LAD11 == "E07000100", LAD14 := "E07000240"]
 lsoa_to_lad_lu[LAD11 == "E07000104", LAD14 := "E07000241"]
-# Gateshead boundary changed, recoded
-lsoa_to_lad_lu[LAD11 == "E08000020", LAD14 := "E08000037"]
 
 ## Most LADs are UTLAs
 # LAD14 - LB
